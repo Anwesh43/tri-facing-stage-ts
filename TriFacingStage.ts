@@ -128,3 +128,35 @@ class Animator {
         }
     }
 }
+
+class TFNode {
+    prev : TFNode
+    next : TFNode
+    state : State = new State()
+
+    constructor(private i : number) {
+        this.addNeighbor()
+    }
+
+    addNeighbor() {
+        if (this.i < nodes - 1) {
+            this.next = new TFNode(this.i + 1)
+            this.next.prev = this
+        }
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        drawTFNode(context, this.i, this.state.scale)
+        if (this.next) {
+            this.next.drawTFNode(context, this.i, this.state.scale)
+        }
+    }
+
+    update(cb : Function) {
+        this.state.update(cb)
+    }
+
+    startUpdating(cb : Function) {
+        this.state.startUpdating(cb)
+    }
+}
