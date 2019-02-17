@@ -148,7 +148,7 @@ class TFNode {
     draw(context : CanvasRenderingContext2D) {
         drawTFNode(context, this.i, this.state.scale)
         if (this.next) {
-            this.next.drawTFNode(context, this.i, this.state.scale)
+            this.next.draw(context)
         }
     }
 
@@ -158,5 +158,17 @@ class TFNode {
 
     startUpdating(cb : Function) {
         this.state.startUpdating(cb)
+    }
+
+    getNext(dir : number, cb : Function) : TFNode {
+        var curr : TFNode = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
     }
 }
