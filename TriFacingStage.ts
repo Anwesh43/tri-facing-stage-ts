@@ -196,3 +196,24 @@ class TriFacing {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+    tf : TriFacing = new TriFacing()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.tf.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.tf.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.tf.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
