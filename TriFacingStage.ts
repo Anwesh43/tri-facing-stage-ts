@@ -30,21 +30,23 @@ const updateValue : Function = (scale : number, dir : number, a : number, b : nu
 
 
 const drawTriangle : Function = (context : CanvasRenderingContext2D, i : number, size : number, scale : number) => {
+    const sf : number = 1 - 2 * i
     const sc1 : number = divideScale(divideScale(scale, 0, 2), i, triangles)
     const sc2 : number = divideScale(divideScale(scale, 1, 2), i, triangles)
     context.save()
-    context.translate(-size * (1 - 2 * i) * sc1, 0)
-    context.rotate(Math.PI / 2 * sc2)
+    context.translate(-(size * 1.5) * sf * sc1, 0)
+    context.rotate((Math.PI / 2) * sf * sc2)
     context.beginPath()
     context.moveTo(-size, size)
     context.lineTo(size, size)
     context.lineTo(0, -size)
+    context.lineTo(-size, size)
     context.stroke()
     context.restore()
 }
 
 const drawTFNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
-    const gap : number = w / (nodes + 1)
+    const gap : number = h / (nodes + 1)
     const size : number = gap / sizeFactor
     context.lineCap = 'round'
     context.lineWidth = Math.min(w, h) / strokeFactor
@@ -52,7 +54,7 @@ const drawTFNode : Function = (context : CanvasRenderingContext2D, i : number, s
     context.save()
     context.translate(w / 2, gap * (i + 1))
     for (var j = 0; j < 2; j++) {
-        drawTriangle(context, i, size, scale)
+        drawTriangle(context, j, size, scale)
     }
     context.restore()
 }
