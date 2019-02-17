@@ -6,6 +6,8 @@ const sizeFactor : number = 2.9
 const strokeFactor : number = 90
 const foreColor : string = "#4CAF50"
 const backColor : string = "#212121"
+const w : number = window.innerWidth
+const h : number = window.innerHeight
 
 const maxScale : Function = (scale : number, i : number, n : number) : number => {
     return Math.max(0, scale - i / n)
@@ -24,4 +26,33 @@ const mirrorValue : Function = (scale : number, a : number, b : number) : number
 
 const updateValue : Function = (scale : number, dir : number, a : number, b : number) : number => {
     return mirrorValue(scale, a, b) * dir * scGap
+}
+
+
+const drawTriangle : Function = (context : CanvasRenderingContext2D, i : number, size : number, scale : number) => {
+    const sc1 : number = divideScale(divideScale(scale, 0, 2), i, triangles)
+    const sc2 : number = divideScale(divideScale(scale, 1, 2), i, triangles)
+    context.save()
+    context.translate(-size * (1 - 2 * i) * sc1, 0)
+    context.rotate(Math.PI / 2 * sc2)
+    context.beginPath()
+    context.moveTo(-size, size)
+    context.lineTo(size, size)
+    context.lineTo(0, -size)
+    context.stroke()
+    context.restore()
+}
+
+const drawTFNode : Function = (context : CanvasRenderingContext2D, i : number, scale : number) => {
+    const gap : number = w / (nodes + 1)
+    const size : number = gap / sizeFactor
+    context.lineCap = 'round'
+    context.lineWidth = Math.min(w, h) / strokeFactor
+    context.strokeStyle = foreColor
+    context.save()
+    context.translate(w / 2, gap * (i + 1))
+    for (var j = 0; j < 2; j++) {
+        drawTriangle(context, i, size, scale)
+    }
+    context.restore()
 }
